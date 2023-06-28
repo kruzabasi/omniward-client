@@ -1,9 +1,10 @@
 {:builds
  {:app {:asset-path "/js"
-        :modules {:main {:init-fn app.core/main}}
+        :modules {:main {:init-fn omniward-client.core/main}}
         :output-dir "public/js"
         :target :browser}}
- :dependencies [[reagent "0.8.1"]]
+ :dependencies [[reagent "0.8.1"]
+                [re-frame "1.2.0"]]
  :dev-http {3000 "public"}
  :nrepl {:port 3333}
  :source-paths ["src"]}
