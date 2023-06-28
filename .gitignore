@@ -9,3 +9,4 @@ report.html
 .clj-kondo
 .lsp
 .DS_Store
+.calva
