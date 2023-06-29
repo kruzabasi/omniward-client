@@ -25,7 +25,13 @@
   [args]
   (modal-frame
    (:open @args)
-   [:h2 (:data @args)]))
+   [:div
+    [:p (str "Are you sure you want to delete the patient?")]
+    (let [patient-id (:data @args)]
+      [:div.card-buttons
+       [:button.delete-button
+        {:on-click #(dispatch [::events/delete-patient patient-id])}
+        "Delete"]])]))
 
 (defmethod multi-modal :add
   [args]

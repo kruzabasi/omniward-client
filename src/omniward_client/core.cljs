@@ -14,4 +14,5 @@
 (defn ^:export main
   []
   (re-frame/dispatch-sync [::events/initialize-db])
+  (re-frame/dispatch [::events/fetch-patients])
   (mount-root))
