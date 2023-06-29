@@ -59,6 +59,10 @@ body {
     border-radius: 4px;
     cursor: pointer;
   }
+
+  .delete-button {
+    background-color: #db3447;  
+  }
   
   .modal {
     display: none;
