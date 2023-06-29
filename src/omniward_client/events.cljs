@@ -1,7 +1,21 @@
 (ns omniward-client.events
   (:require
-   [re-frame.core :refer [reg-event-fx reg-event-db subscribe]]
-   [omniward-client.db :as db]))
+   [clojure.string :as string]
+   [re-frame.core :refer [reg-event-db]]
+   [omniward-client.db :as db]
+   [superstructor.re-frame.fetch-fx]))
+
+(defn filter-patients
+  [query patients]
+  (let [query (string/trim query)]
+    (filter #(re-find (re-pattern (str "(?i)" query)) (:name %)) patients)))
+
+(reg-event-db
+ ::search-patients
+ (fn [db [_ input]]
+   (let [all-patients (:patients db)
+         res (filter-patients input all-patients)]
+     (assoc db :search {:query input :res res}))))
 
 (reg-event-db
  ::initialize-db
