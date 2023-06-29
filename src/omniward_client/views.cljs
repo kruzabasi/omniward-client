@@ -1,5 +1,7 @@
 (ns omniward-client.views
   (:require
+   [re-frame.core :refer [dispatch]]
+   [omniward-client.events :as events]
    [omniward-client.components.search :refer [search-bar]]
    [omniward-client.components.patient-card :refer [patient-card]]))
 
@@ -7,7 +9,10 @@
   [:div.container
    [search-bar]
    [:button.add-button
-    {:on-click #()}
+    {:on-click #(dispatch
+                 [::events/toggle-modal
+                  {:open true
+                   :type :add}])}
     "Add Patient"]
    (let [patient {:name "King Xavier II"
                   :dob "02-09-2001"
