@@ -18,6 +18,11 @@
      (assoc db :search {:query input :res res}))))
 
 (reg-event-db
+ ::toggle-modal
+ (fn [db [_ opts]]
+   (assoc db :modal opts)))
+
+(reg-event-db
  ::initialize-db
  (fn [_ _]
    db/default-db))

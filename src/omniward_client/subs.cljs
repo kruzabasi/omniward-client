@@ -11,3 +11,8 @@
  ::search
  (fn [db]
    (:search db)))
+
+(reg-sub
+ ::modal
+ (fn [db]
+   (:modal db)))
