@@ -4,7 +4,8 @@
         :output-dir "public/js"
         :target :browser}}
  :dependencies [[reagent "0.8.1"]
-                [re-frame "1.2.0"]]
+                [re-frame "1.2.0"]
+                [superstructor/re-frame-fetch-fx "0.2.0"]]
  :dev-http {3000 "public"}
  :nrepl {:port 3333}
  :source-paths ["src"]}

@@ -31,10 +31,10 @@
         (multi-modal modal-open)
         [:div.card
          [:h3 (:name patient)]
-         [:p "Date of Birth: " (:date-of-birth patient)]
+         [:p "Date of Birth: " (.toLocaleDateString (js/Date. (:dob patient)))]
          [:p "Address: " (:address patient)]
          [:p "Gender: " (:gender patient)]
-         [:p "Phone Number: " (:phone-number patient)]
+         [:p "Phone Number: " (:phone patient)]
          [:div.card-buttons
           [:button.edit-button
            {:on-click #(reset! modal-open {:open true :type :edit})}
