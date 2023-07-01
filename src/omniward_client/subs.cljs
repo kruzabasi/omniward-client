@@ -13,6 +13,15 @@
    (:search db)))
 
 (reg-sub
+ ::patients-filtered
+ :<- [::patients]
+ :<- [::search]
+ (fn [[all search] _]
+   (if (empty? (:query search))
+     all
+     (:res search))))
+
+(reg-sub
  ::modal
  (fn [db]
    (:modal db)))

@@ -15,9 +15,5 @@
                   {:open true
                    :type :add}])}
     "Add Patient"]
-   (let [search       (subscribe [::subs/search])
-         all-patients (subscribe [::subs/patients])
-         patients     (if (empty? (:query @search))
-                        @all-patients
-                        (:res @search))]
-     (patient-cards patients))])
+   (let [patients (subscribe [::subs/patients-filtered])]
+     (patient-cards @patients))])
