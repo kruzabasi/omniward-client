@@ -5,6 +5,20 @@
    [omniward-client.events :as events]
    [omniward-client.components.modals :refer [multi-modal]]))
 
+(defn lead-0
+  [num]
+  (if (> num 9) num (str "0" num)))
+(defn
+  format-date
+  [date]
+  (let [inst  (js/Date. date)
+        day   (-> (.getDate inst)
+                  lead-0)
+        month (-> (.getMonth inst)
+                  lead-0)
+        year  (.getFullYear inst)]
+    (str year "-" month "-" day)))
+
 (defn patient-card
   [patient]
   (fn []
@@ -16,15 +30,15 @@
      [:p "Phone Number: " (:phone patient)]
      [:div.card-buttons
       [:button.edit-button
-       {:on-click #(dispatch [::events/toggle-modal 
+       {:on-click #(dispatch [::events/toggle-modal
                               {:open true
                                :type :edit
-                               :data patient}])}
+                               :data (merge patient {:dob (format-date (:dob patient))})}])}
        "Edit"]
       [:button.delete-button
-       {:on-click #(dispatch [::events/toggle-modal 
-                              {:open true 
-                               :type :delete 
+       {:on-click #(dispatch [::events/toggle-modal
+                              {:open true
+                               :type :delete
                                :data (:patient_id patient)}])}
        "Delete"]]]))
 
