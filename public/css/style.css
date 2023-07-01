@@ -18,12 +18,18 @@ body {
     margin-bottom: 20px;
   }
   
-  .search-input {
+  .search-input,
+  .text-input {
     flex: 1;
     height: 30px;
     padding: 5px;
     border: 1px solid #ccc;
     border-radius: 4px;
+  }
+
+  .text-input  {  
+    margin-bottom: 12px;
+    border: 1px solid #858282;
   }
   
   .add-button {

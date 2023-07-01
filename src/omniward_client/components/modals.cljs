@@ -1,9 +1,8 @@
 (ns omniward-client.components.modals
   (:require
    [re-frame.core :refer [dispatch]]
-   [omniward-client.events :as events]))
-
-(defmulti multi-modal (fn [x] (:type @x)))
+   [omniward-client.events :as events]
+   [omniward-client.components.forms :refer [patient-form]]))
 
 (defn modal-frame
   [open? body]
@@ -15,11 +14,16 @@
      {:on-click #(dispatch [::events/toggle-modal {:open false}])}
      "Close"]]])
 
+(defmulti multi-modal (fn [x] (:type @x)))
+
 (defmethod multi-modal :edit
   [args]
   (modal-frame
    (:open @args)
-   [:div "Edit"]))
+   [patient-form
+    "Modify patients record"
+    #()
+    (:data @args)]))
 
 (defmethod multi-modal :delete
   [args]
@@ -37,4 +41,6 @@
   [args]
   (modal-frame
    (:open @args)
-   [:div [:h1 "New Patient"]]))
+   [patient-form
+    "Create a new patient record"
+    #(dispatch [::events/create-new-patient])]))
