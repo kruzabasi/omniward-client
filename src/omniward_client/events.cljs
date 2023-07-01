@@ -14,18 +14,20 @@
    (api-req method path on-success on-failure nil))
   ([method path on-success on-failure data]
    {:method method
-    :url (str base-url path)
-    :params       data
+    :url          (str base-url path)
+    :params       (:query data)
+    :body         (:body data)
     :mode         :cors
     :timeout      5000
     :on-success   on-success
-    :on-failure   on-failure}))
+    :on-failure   on-failure
+    :request-content-type :json
+    :response-content-types {#"application/.*json" :json}}))
 
 (reg-event-db
  ::load-patients
  (fn [db [_ res]]
-   (let [res (->> res :body (.parse js/JSON))
-         patients (:data (js->clj res :keywordize-keys true))]
+   (let [patients (-> res :body :data)]
      (assoc db :patients patients))))
 
 (reg-event-db
@@ -52,6 +54,13 @@
    (let [all-patients (:patients db)
          res (filter-patients input all-patients)]
      (assoc db :search {:query input :res res}))))
+
+(reg-event-db
+ ::modify-patient-form
+ (fn [db [_ field input]]
+   (if field
+     (assoc-in db [:patient-form field] input)
+     (assoc-in db [:patient-form] input))))
 
 (reg-event-db
  ::toggle-modal
@@ -92,6 +101,35 @@
  (fn [_ _]
    {:fx [[:dispatch [::toggle-modal {:open false}]]]}))
 ;;TODO: Show message on failure.
+
+
+(reg-event-fx
+ ::create-new-patient
+ (fn [{:keys [db]} _]
+   (let [data (:patient-form db)]
+        {:fetch
+         (api-req
+          :post
+          nil
+          [::create-new-patient-success]
+          [::create-new-patient-failure]
+          {:body (-> data
+                     (assoc :p-name (:name data))
+                     (dissoc :name))})})))
+
+(reg-event-fx
+ ::create-new-patient-success
+ (fn [{:keys [db]} [_ res]]
+   (let [new-patient (-> res :body :data)
+         patients (:patients db)
+         updated  (conj patients new-patient)]
+     {:db (assoc-in db [:patients] updated)
+      :fx [[:dispatch [::toggle-modal {:open false}]]]})))
+
+(reg-event-fx
+ ::create-new-patient-failure
+ (fn [_ [_ res]]
+   (js/console.log res)))
 
 (reg-event-db
  ::initialize-db
