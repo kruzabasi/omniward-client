@@ -12,7 +12,20 @@
      {:type type
       :placeholder placeholder
       :value @input
+      :required true
       :on-change change-fn}]))
+
+(defn patient-form-select
+  [value placeholder change-fn]
+  (let [input (subscribe value)]
+    [:select.text-input
+     {:value     (or @input "")
+      :on-change #(dispatch (conj change-fn (-> % .-target .-value)))
+      :required true}
+     [:option {:value ""} placeholder]
+     [:option {:value "Male"} "Male"]
+     [:option {:value "Female"} "Female"]
+     [:option {:value "Other"} "Other"]]))
 
 (defn patient-form
   ([title on-submit]
@@ -34,11 +47,10 @@
       "date of birth"
       {:value     [::subs/patient-form-date]
        :on-change [::events/modify-patient-form :dob]}]
-     [patient-form-input
-      "text"
-      "Patients gender"
-      {:value     [::subs/patient-form-gender]
-       :on-change [::events/modify-patient-form :gender]}]
+     [patient-form-select
+      [::subs/patient-form-gender]
+      "--Patients gender--"
+      [::events/modify-patient-form :gender]]
      [patient-form-input
       "text"
       "Patients phone number"
@@ -50,4 +62,4 @@
       {:value     [::subs/patient-form-address]
        :on-change [::events/modify-patient-form :address]}]
      [:div.card-buttons
-      [:button.add-button {:type "submit" :disabled true} "Submit"]]]]))
+      [:button.add-button {:type "submit" :disabled false} "Submit"]]]]))
