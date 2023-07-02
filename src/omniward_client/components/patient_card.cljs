@@ -15,6 +15,7 @@
         day   (-> (.getDate inst)
                   lead-0)
         month (-> (.getMonth inst)
+                  (+ 1)
                   lead-0)
         year  (.getFullYear inst)]
     (str year "-" month "-" day)))
