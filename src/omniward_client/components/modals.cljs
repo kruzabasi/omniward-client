@@ -22,7 +22,7 @@
    (:open @args)
    [patient-form
     "Modify patients record"
-    #()
+    #(dispatch [::events/submit:modify-patient])
     (:data @args)]))
 
 (defmethod multi-modal :delete
@@ -43,4 +43,4 @@
    (:open @args)
    [patient-form
     "Create a new patient record"
-    #(dispatch [::events/create-new-patient])]))
+    #(dispatch [::events/submit:create-patient])]))

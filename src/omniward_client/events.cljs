@@ -102,23 +102,53 @@
    {:fx [[:dispatch [::toggle-modal {:open false}]]]}))
 ;;TODO: Show message on failure.
 
-
 (reg-event-fx
- ::create-new-patient
+ ::submit:modify-patient
  (fn [{:keys [db]} _]
-   (let [data (:patient-form db)]
-        {:fetch
-         (api-req
-          :post
-          nil
-          [::create-new-patient-success]
-          [::create-new-patient-failure]
-          {:body (-> data
-                     (assoc :p-name (:name data))
-                     (dissoc :name))})})))
+   (let [data (:patient-form db)
+         patient-id (:patient_id data)
+         params (-> data
+                    (assoc :p-name (:name data))
+                    (dissoc :name :patient_id))]
+     {:fetch (api-req
+              :put
+              (str "/" patient-id)
+              [::modify-patient-success patient-id]
+              [::modify-patient-failure]
+              {:query params})})))
 
 (reg-event-fx
- ::create-new-patient-success
+ ::modify-patient-success
+ (fn [{:keys [db]} [_ id res]]
+   (let [patient-res (-> res :body :data)
+         patient     (assoc patient-res :patient_id id)
+         patients    (:patients db)
+         updated     (-> (remove-patient patients id)
+                         (conj patient))]
+     {:db (assoc-in db [:patients] updated)
+      :fx [[:dispatch [::toggle-modal {:open false}]]]})))
+
+(reg-event-fx
+ ::modify-patient-failure
+ (fn [_ [_ res]]
+   (js/console.log res)))
+
+(reg-event-fx
+ ::submit:create-patient
+ (fn [{:keys [db]} _]
+   (let [data   (:patient-form db)
+         params (-> data
+                    (assoc :p-name (:name data))
+                    (dissoc :name))]
+     {:fetch  (api-req
+               :post
+               nil
+               [::create-patient-success]
+               [::create-patient-failure]
+               {:body params})})))
+
+(reg-event-fx
+ ::create-patient-success
  (fn [{:keys [db]} [_ res]]
    (let [new-patient (-> res :body :data)
          patients (:patients db)
@@ -127,7 +157,7 @@
       :fx [[:dispatch [::toggle-modal {:open false}]]]})))
 
 (reg-event-fx
- ::create-new-patient-failure
+ ::create-patient-failure
  (fn [_ [_ res]]
    (js/console.log res)))
 
