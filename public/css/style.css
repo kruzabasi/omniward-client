@@ -20,18 +20,27 @@ body {
   
   .search-input,
   .text-input {
-    flex: 1;
     height: 30px;
     padding: 5px;
     border: 1px solid #ccc;
     border-radius: 4px;
   }
-
-  .text-input  {  
-    margin-bottom: 12px;
+  .search-input{
+    flex: 1;
+  }
+  .text-input  {
     border: 1px solid #858282;
   }
-  
+
+  .input-section{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 12px;
+  }
+  .error-msg{
+    font-size: small;
+    color: #db3447;
+  }
   .add-button {
     padding: 8px 16px;
     background-color: #2ecc71;
@@ -40,7 +49,11 @@ body {
     border-radius: 4px;
     cursor: pointer;
   }
-  
+  .add-button:disabled{
+    background-color: #2747349c;
+    cursor: initial;
+    
+  }
   .card {
     background-color: #fff;
     border: 1px solid #ccc;
