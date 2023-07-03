@@ -52,7 +52,6 @@ body {
   .add-button:disabled{
     background-color: #2747349c;
     cursor: initial;
-    
   }
   .card {
     background-color: #fff;

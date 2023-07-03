@@ -46,7 +46,7 @@
         invalid-form? (or invalid-phone? invalid-add? invalid-dob? invalid-name?)]
     [:button.add-button
      {:type "submit"
-      :className (if invalid-form? "addbutton:disabled" "add-button")
+      :className (when invalid-form? "add-button:disabled")
       :disabled invalid-form?}
      "Submit"]))
 
