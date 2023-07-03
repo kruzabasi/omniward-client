@@ -6,6 +6,12 @@ This is a simple frontend web application for managing a patients directory. It 
 
 The app is live and accessible at: [https://omniward-client.vercel.app/](https://omniward-client.vercel.app/)
 
+## Technologies Used
+
+ClojureScript with [Reagent](http://reagent-project.github.io), [Re-frame](https://github.com/day8/re-frame) and [Shadow-cljs](https://github.com/thheller/shadow-cljs).
+[Vercel](http://vercel.com/) for hosting the live version of the app.
+
+
 ## Local Development
 
 To run the app locally on your machine, follow these instructions:
