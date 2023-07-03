@@ -8,11 +8,11 @@
     :else msg))
 
 (defn validate-date
-  [dob]
+  [date]
   (try
-    (let [parsed-dob (js/Date. dob)
+    (let [parsed-date  (js/Date. date)
           current-date (js/Date.)
-          valid? (> (.getTime current-date) (.getTime parsed-dob))]
+          valid?       (> (.getTime current-date) (.getTime parsed-date))]
       valid?)
     (catch js/Error _ false)))
 
