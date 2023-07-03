@@ -98,9 +98,9 @@
 
 (reg-event-fx
  ::delete-patient-failure
- (fn [_ _]
+ (fn [_ [_ res]]
+   (js/alert (str (:problem-message res) "!"))
    {:fx [[:dispatch [::toggle-modal {:open false}]]]}))
-;;TODO: Show message on failure.
 
 (reg-event-fx
  ::submit:modify-patient
@@ -131,7 +131,7 @@
 (reg-event-fx
  ::modify-patient-failure
  (fn [_ [_ res]]
-   (js/console.log res)))
+   (js/alert (str (:problem-message res) "!"))))
 
 (reg-event-fx
  ::submit:create-patient
@@ -159,7 +159,7 @@
 (reg-event-fx
  ::create-patient-failure
  (fn [_ [_ res]]
-   (js/console.log res)))
+   (js/alert (str (:problem-message res) "!"))))
 
 (reg-event-db
  ::initialize-db
