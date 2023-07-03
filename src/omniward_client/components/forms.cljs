@@ -19,13 +19,14 @@
        :value @input
        :required true
        :on-change change-fn}]
-     (when error-message
+     (when (not= "empty" error-message)
        [:span.error-msg error-message])]))
 
 (defn patient-form-select
-  [value placeholder change-fn]
+  [value placeholder change-fn error]
   (let [input (subscribe value)
-        field-id (last change-fn)]
+        field-id (last change-fn)
+        error-message (error @input)]
     [:div.input-section
      [:select.text-input
       {:id field-id
@@ -35,7 +36,9 @@
       [:option {:value ""} placeholder]
       [:option {:value "Male"} "Male"]
       [:option {:value "Female"} "Female"]
-      [:option {:value "Other"} "Other"]]]))
+      [:option {:value "Other"} "Other"]]
+     (when (not= "empty" error-message)
+       [:span.error-msg error-message])]))
 
 (defn form-submit-button
   []
@@ -43,10 +46,11 @@
         invalid-dob?  (v/validate-date-of-birth @(subscribe [::subs/patient-form-date]))
         invalid-add?  (v/validate-address @(subscribe [::subs/patient-form-address]))
         invalid-phone? (v/validate-phone-number @(subscribe [::subs/patient-form-phone]))
-        invalid-form? (or invalid-phone? invalid-add? invalid-dob? invalid-name?)]
+        invalid-gender? (v/validate-gender @(subscribe [::subs/patient-form-gender]))
+        invalid-form? (or invalid-gender? invalid-phone? invalid-add? invalid-dob? invalid-name?)]
     [:button.add-button
      {:type "submit"
-      :className (if invalid-form? "addbutton:disabled" "add-button")
+      :className (when invalid-form? "add-button:disabled")
       :disabled invalid-form?}
      "Submit"]))
 
@@ -75,7 +79,8 @@
      [patient-form-select
       [::subs/patient-form-gender]
       "--Patients gender--"
-      [::events/modify-patient-form :gender]]
+      [::events/modify-patient-form :gender]
+      v/validate-gender]
      [patient-form-input
       "text"
       "Patients phone number"
