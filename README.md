@@ -16,6 +16,9 @@ ClojureScript with [Reagent](http://reagent-project.github.io), [Re-frame](https
 
 To run the app locally on your machine, follow these instructions:
 
+Pre:
+Ensure The Local Server is up and running:
+
 1. Clone the GitHub repository:
 
 ```bash
