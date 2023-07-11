@@ -38,17 +38,19 @@
 
 (defn validate-phone-number
   [phone]
-  (let [phone-pattern #"\d{10}"
+  (let [phone-pattern #"[0-9]{10,15}"
         valid? (try
-                 (re-find phone-pattern phone)
+                 (re-matches phone-pattern phone)
                  (catch js/Error _ false))]
     (error-message phone valid? "Invalid phone number")))
 
 (defn validate-name
   "Validate the patient's full name"
   [name]
-  (let [name-pattern #"[A-Za-z ]+"
+  (let [name-pattern #"[A-Za-z ' - .]+"
         valid? (try
-                 (re-find name-pattern  name)
+                 (and
+                  (>= 40 (count name) 2)
+                  (re-matches name-pattern  name))
                  (catch js/Error _ false))]
     (error-message name valid? "Invalid name")))

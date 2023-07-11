@@ -13,13 +13,30 @@
    (:search db)))
 
 (reg-sub
+ ::filters
+ (fn [db]
+   (:filter-panel db)))
+
+(reg-sub
+ ::filter-res
+ (fn [db]
+   (:filter-res db)))
+
+(defn common [vec1 vec2] (into [] (for [x vec1 :when (contains? (set vec2) x)] x)))
+
+(reg-sub
  ::patients-filtered
  :<- [::patients]
  :<- [::search]
- (fn [[all search] _]
-   (if (empty? (:query search))
-     all
-     (:res search))))
+ :<- [::filter-res]
+ (fn [[all search filter] _]
+   (let [searched (if (empty? (:query search))
+                    all
+                    (:res search))
+         filtered (if (:attr filter)
+                    (:res filter)
+                    all)]
+     (common searched filtered))))
 
 (reg-sub
  ::patient-form
@@ -54,6 +71,7 @@
  :<- [::patient-form]
  (fn [form]
    (:gender form)))
+
 (reg-sub
  ::modal
  (fn [db]
