@@ -43,17 +43,47 @@
      (assoc db :patients dummy-patients))))
 ;;Fix req-failed This once API is deployed.
 
-(defn filter-patients
+(defn search-by-name
   [query patients]
   (let [query (string/trim query)]
     (filter #(re-find (re-pattern (str "(?i)" query)) (:name %)) patients)))
+
+(defn filter-by-attr
+  [val attr patients]
+  (filter #(re-matches (re-pattern (str "(?i)" val)) (attr %)) patients))
 
 (reg-event-db
  ::search-patients
  (fn [db [_ input]]
    (let [all-patients (:patients db)
-         res (filter-patients input all-patients)]
+         res (search-by-name input all-patients)]
      (assoc db :search {:query input :res res}))))
+
+(reg-event-db
+ ::filter-patients
+ (fn [db [_ attr val]]
+   (let [all-patients (:patients db)
+         res          (filter-by-attr val attr all-patients)
+         filter-attr  (attr (:filter-panel db))]
+     (assoc db :filter-res {:attr filter-attr :res res}))))
+
+(reg-event-db
+ ::show-filter-panel
+ (fn [db [_ {:keys [open]}]]
+   (let [prev-val  (:open (:filter-panel db))
+         new-val   (if (= :toggle open)
+                      (not prev-val)
+                      open)]
+     (assoc-in db [:filter-panel :open] new-val))))
+
+(reg-event-fx
+ ::toggle-filter-option
+ (fn [{:keys [db]} [_ group selection]]
+   (let [current-state  ((:filter-panel db) group)
+         prev-selected? (= selection current-state)
+         new-state      (if prev-selected? nil selection)]
+     {:db (update-in db [:filter-panel] merge {group new-state})
+      :fx [[:dispatch [::filter-patients group selection]]]})))
 
 (reg-event-db
  ::modify-patient-form
@@ -159,7 +189,7 @@
 (reg-event-fx
  ::create-patient-failure
  (fn [_ [_ res]]
-   (js/alert (str (:problem-message res) "!"))))
+   (js/alert (str (:body res) "!"))))
 
 (reg-event-db
  ::initialize-db
