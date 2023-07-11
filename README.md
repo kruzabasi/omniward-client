@@ -2,10 +2,6 @@
 
 This is a simple frontend web application for managing a patients directory. It allows you to browse, search, create, delete, and edit patient records.
 
-## Live URL
-
-The app is live and accessible at: [https://omniward-client.vercel.app/](https://omniward-client.vercel.app/)
-
 ## Technologies Used
 
 ClojureScript with [Reagent](http://reagent-project.github.io), [Re-frame](https://github.com/day8/re-frame) and [Shadow-cljs](https://github.com/thheller/shadow-cljs).
