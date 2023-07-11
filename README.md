@@ -14,6 +14,7 @@ To run the app locally on your machine, follow these instructions:
 
 Pre:
 Ensure The Local Server is up and running:
+https://github.com/kruzabasi/omniward
 
 1. Clone the GitHub repository:
 
