@@ -34,9 +34,9 @@
        :on-change #(dispatch (conj change-fn (-> % .-target .-value)))
        :required true}
       [:option {:value ""} placeholder]
-      [:option {:value "Male"} "Male"]
-      [:option {:value "Female"} "Female"]
-      [:option {:value "Other"} "Other"]]
+      [:option {:value "male"} "Male"]
+      [:option {:value "female"} "Female"]
+      [:option {:value "other"} "Other"]]
      (when (not= "empty" error-message)
        [:span.error-msg error-message])]))
 

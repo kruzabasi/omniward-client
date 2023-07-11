@@ -24,7 +24,7 @@
 (defn validate-gender
   "Validate the patient's gender"
   [gender]
-  (let [valid-genders #{"Male" "Female" "Other"}
+  (let [valid-genders #{"male" "female" "other"}
         valid? (contains? valid-genders gender)]
     (error-message gender valid? "Invalid gender")))
 
